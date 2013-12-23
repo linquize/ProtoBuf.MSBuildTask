@@ -1,0 +1,17 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask 
+    TaskName="ProtoBuf.MSBuildTask.ProtoGen" 
+    AssemblyFile="ProtoBuf.MSBuildTask.dll" />
+  <PropertyGroup>
+    <ProtoGenExecutable Condition="'$(ProtoGenExecutable)' == ''">$(ProtoGenPath)protogen.exe</ProtoGenExecutable>
+  </PropertyGroup>
+  <Target Name="ProtoGenTask" BeforeTargets="CoreCompile" Condition="'@(ProtoBuf)' != '' ">
+    <Message Importance="high" Text="ProtoGenTask" />
+    <ProtoGen
+      OutputPath="$(IntermediateOutputPath)"
+      SourceCodeFiles="@(ProtoBuf)"
+      ProtoGenExecutable="$(ProtoGenExecutable)">
+      <Output ItemName="Compile" TaskParameter="GeneratedCodeFiles" />
+    </ProtoGen>
+  </Target>
+</Project>

@@ -1,0 +1,16 @@
+[Bb]in
+[Oo]bj
+*.suo
+*.user
+*.[Cc]ache
+*[Rr]esharper*
+Bootstrap
+packages
+[Bb]uild
+Temp
+TestResults
+Test
+*.zip
+*.nupkg
+*.msi
+*.chm
