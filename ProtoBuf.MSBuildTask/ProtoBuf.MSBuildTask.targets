@@ -5,8 +5,42 @@
   <PropertyGroup>
     <ProtoGenExecutable Condition="'$(ProtoGenExecutable)' == ''">$(ProtoGenPath)protogen.exe</ProtoGenExecutable>
   </PropertyGroup>
-  <Target Name="ProtoGenTask" BeforeTargets="CoreCompile" Condition="'@(ProtoBuf)' != '' ">
-    <Message Importance="high" Text="ProtoGenTask" />
+
+  <PropertyGroup>
+    <LoadTimeSensitiveTargets>
+      $(LoadTimeSensitiveTargets);
+      DesignTimeProtoGen;
+    </LoadTimeSensitiveTargets>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PrepareResourcesDependsOn>
+      ProtoGen;
+      $(PrepareResourcesDependsOn)
+    </PrepareResourcesDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Add Markup compilation to the CoreCompileDependsOn so that the IDE inproc compilers (particularly VB)
+             can "see" the generated source files. -->
+    <CoreCompileDependsOn Condition="'$(BuildingInsideVisualStudio)' == 'true' ">
+      DesignTimeProtoGen;
+      $(CoreCompileDependsOn)
+    </CoreCompileDependsOn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(BuildingInsideVisualStudio)'=='true'">
+    <!-- Add ProtoBuf specific Item names to AvailableItemName item, so that they can show up
+    in a drop-down menu for Build Action field of the properties window in VisualStudio. --> 
+    <AvailableItemName Include="ProtoBuf" /> 
+  </ItemGroup>
+
+  <Target Name="DesignTimeProtoGen">
+    <!-- Only if we are not actually performing a compile i.e. we are in design mode -->
+    <CallTarget Condition="'$(BuildingProject)' != 'true'" Targets="ProtoGen" />
+  </Target>
+  <Target Name="ProtoGen" Condition="'@(ProtoBuf)' != '' ">
+    <Message Importance="high" Text="ProtoGen" />
     <ProtoGen
       OutputPath="$(IntermediateOutputPath)"
       SourceCodeFiles="@(ProtoBuf)"
