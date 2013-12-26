@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoBuf.MSBuildTask", "ProtoBuf.MSBuildTask\ProtoBuf.MSBuildTask.csproj", "{5E77B127-8945-4D00-A69D-D7154D30C071}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtoBuf.Project", "ProtoBuf.Project\ProtoBuf.Project.csproj", "{EC3224D4-77E3-470E-B57F-021618A23CE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{5E77B127-8945-4D00-A69D-D7154D30C071}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E77B127-8945-4D00-A69D-D7154D30C071}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E77B127-8945-4D00-A69D-D7154D30C071}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3224D4-77E3-470E-B57F-021618A23CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3224D4-77E3-470E-B57F-021618A23CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3224D4-77E3-470E-B57F-021618A23CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3224D4-77E3-470E-B57F-021618A23CE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
