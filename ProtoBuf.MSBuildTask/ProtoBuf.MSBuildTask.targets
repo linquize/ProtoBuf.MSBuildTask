@@ -4,6 +4,7 @@
     AssemblyFile="ProtoBuf.MSBuildTask.dll" />
   <PropertyGroup>
     <ProtoGenExecutable Condition="'$(ProtoGenExecutable)' == ''">$(ProtoGenPath)protogen.exe</ProtoGenExecutable>
+    <ProtoBufNamespace Condition="'$(ProtoBufNamespace)' == ''">$(RootNamespace)</ProtoBufNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -44,7 +45,9 @@
     <ProtoGen
       OutputPath="$(IntermediateOutputPath)"
       SourceCodeFiles="@(ProtoBuf)"
-      ProtoGenExecutable="$(ProtoGenExecutable)">
+      ProtoGenExecutable="$(ProtoGenExecutable)"
+      Namespace="$(ProtoBufNamespace)"
+      >
       <Output ItemName="Compile" TaskParameter="GeneratedCodeFiles" />
     </ProtoGen>
   </Target>

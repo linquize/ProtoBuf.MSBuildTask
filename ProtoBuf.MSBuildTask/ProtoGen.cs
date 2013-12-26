@@ -16,6 +16,8 @@ namespace ProtoBuf.MSBuildTask
 
         public string ProtoGenExecutable { get; set; }
 
+        public string Namespace { get; set; }
+
         [Output]
         public ITaskItem[] GeneratedCodeFiles { get; set; }
 
@@ -33,6 +35,13 @@ namespace ProtoBuf.MSBuildTask
             sb.Append(@"-o:""");
             sb.Append(output);
             sb.Append(@""" ");
+            if (!string.IsNullOrEmpty(Namespace))
+            {
+                sb.Append(@"-ns:""");
+                sb.Append(Namespace);
+                sb.Append(@""" ");
+            }
+
             Console.Error.WriteLine(ProtoGenExecutable + " " + sb.ToString());
             var process = Process.Start(new ProcessStartInfo(ProtoGenExecutable, sb.ToString()) { CreateNoWindow = true, UseShellExecute = false });
             process.WaitForExit();
