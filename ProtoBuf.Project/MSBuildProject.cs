@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Linq;
+using System.Xml;
 
 namespace ProtoBuf.Project
 {
@@ -8,10 +9,32 @@ namespace ProtoBuf.Project
 
         XmlDocument xd;
 
+        public string ProtoGenPath { get; private set; }
+        public bool HasProtoGenImport { get; private set; }
+
         public void Open(string projectFile)
         {
             xd = new XmlDocument();
             xd.Load(projectFile);
+
+            var xnm = new XmlNamespaceManager(xd.NameTable);
+            xnm.AddNamespace("msbuild", msbuildNS);
+            var protoGenPathNode = xd.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup[not(@Condition)]/msbuild:ProtoGenPath", xnm);
+            if (protoGenPathNode != null)
+                ProtoGenPath = protoGenPathNode.InnerText;
+
+            string importProject = @"$(ProtoGenPath)\ProtoBuf.MSBuildTask.targets";
+            var importNode = xd.SelectSingleNode("/msbuild:Project/msbuild:Import[@Project='" + importProject + "']", xnm);
+            HasProtoGenImport = importNode != null;
+        }
+
+        public string[] LoadItems()
+        {
+            var xnm = new XmlNamespaceManager(xd.NameTable);
+            xnm.AddNamespace("msbuild", msbuildNS);
+
+            var nodes = xd.SelectNodes("/msbuild:Project/msbuild:ItemGroup/msbuild:ProtoBuf", xnm);
+            return nodes.Cast<XmlElement>().Select(a => a.GetAttribute("Include")).Where(a => !string.IsNullOrEmpty(a)).ToArray();
         }
 
         public void Init(string protoGenPath)
@@ -27,6 +50,7 @@ namespace ProtoBuf.Project
                 xe.SetAttribute("Project", importProject);
                 importNode = xe;
                 xd.DocumentElement.AppendChild(xe);
+                HasProtoGenImport = true;
             }
 
             var protoGenPathNode = xd.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup[not(@Condition)]/msbuild:ProtoGenPath", xnm);
@@ -38,6 +62,12 @@ namespace ProtoBuf.Project
                 xe.AppendChild(xe2);
                 // ensure properties come before targets
                 xd.DocumentElement.InsertBefore(xe, importNode);
+                ProtoGenPath = protoGenPath;
+            }
+            else
+            {
+                protoGenPathNode.InnerText = protoGenPath;
+                ProtoGenPath = protoGenPath;
             }
         }
 
