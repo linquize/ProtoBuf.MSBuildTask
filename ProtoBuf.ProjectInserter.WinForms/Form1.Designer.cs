@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnOpen = new System.Windows.Forms.Button();
             this.btnInit = new System.Windows.Forms.Button();
             this.btnAddFiles = new System.Windows.Forms.Button();
@@ -131,6 +132,7 @@
             this.Controls.Add(this.btnInit);
             this.Controls.Add(this.btnOpen);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "ProtoBuf Project Inserter";
