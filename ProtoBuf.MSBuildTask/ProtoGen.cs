@@ -42,7 +42,7 @@ namespace ProtoBuf.MSBuildTask
                 sb.Append(@""" ");
             }
 
-            Console.Error.WriteLine(ProtoGenExecutable + " " + sb.ToString());
+            Log.LogCommandLine(ProtoGenExecutable + " " + sb.ToString());
             var process = Process.Start(new ProcessStartInfo(ProtoGenExecutable, sb.ToString()) { CreateNoWindow = true, UseShellExecute = false });
             process.WaitForExit();
             list.Add(new TaskItem(output));
