@@ -82,10 +82,10 @@ namespace ProtoBuf.Project
             xe3.InnerText = "MSBuild:Compile";
             xe2.AppendChild(xe3);
 
-            var protoBufNode = xd.SelectSingleNode("/msbuild:Project/msbuild:ItemGroup/msbuild:ProtoBuf", xnm);
-            if (protoBufNode == null)
+            var protoBufNodes = xd.SelectNodes("/msbuild:Project/msbuild:ItemGroup/msbuild:ProtoBuf", xnm);
+            if (protoBufNodes.Count == 0)
             {
-                protoBufNode = xd.CreateElement("ItemGroup", msbuildNS);
+                var protoBufNode = xd.CreateElement("ItemGroup", msbuildNS);
                 var itemGroupNodes = xd.SelectNodes("/msbuild:Project/msbuild:ItemGroup", xnm);
                 if (itemGroupNodes.Count > 0)
                     xd.DocumentElement.InsertAfter(protoBufNode, itemGroupNodes[itemGroupNodes.Count - 1]);
@@ -94,7 +94,10 @@ namespace ProtoBuf.Project
                 protoBufNode.AppendChild(xe2);
             }
             else
-                protoBufNode.ParentNode.AppendChild(xe2);
+            {
+                if (!protoBufNodes.Cast<XmlElement>().Any(a => a.GetAttribute("Include") == protoFile))
+                    protoBufNodes[protoBufNodes.Count - 1].ParentNode.AppendChild(xe2);
+            }
         }
 
         public void Save(string projectFile)
