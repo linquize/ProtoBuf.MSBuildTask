@@ -9,8 +9,9 @@ namespace ProtoBuf.Project
 
         XmlDocument xd;
 
+        public string ProtoBufTaskPath { get; private set; }
         public string ProtoGenPath { get; private set; }
-        public bool HasProtoGenImport { get; private set; }
+        public bool HasProtoBufTaskImport { get; private set; }
 
         public void Open(string projectFile)
         {
@@ -19,13 +20,17 @@ namespace ProtoBuf.Project
 
             var xnm = new XmlNamespaceManager(xd.NameTable);
             xnm.AddNamespace("msbuild", msbuildNS);
+            var protoTaskPathNode = xd.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup[not(@Condition)]/msbuild:ProtoBufTaskPath", xnm);
+            if (protoTaskPathNode != null)
+                ProtoBufTaskPath = protoTaskPathNode.InnerText;
+
             var protoGenPathNode = xd.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup[not(@Condition)]/msbuild:ProtoGenPath", xnm);
             if (protoGenPathNode != null)
                 ProtoGenPath = protoGenPathNode.InnerText;
 
-            string importProject = @"$(ProtoGenPath)\ProtoBuf.MSBuildTask.targets";
+            string importProject = @"$(ProtoBufTaskPath)\ProtoBuf.MSBuildTask.targets";
             var importNode = xd.SelectSingleNode("/msbuild:Project/msbuild:Import[@Project='" + importProject + "']", xnm);
-            HasProtoGenImport = importNode != null;
+            HasProtoBufTaskImport = importNode != null;
         }
 
         public string[] LoadItems()
@@ -37,12 +42,12 @@ namespace ProtoBuf.Project
             return nodes.Cast<XmlElement>().Select(a => a.GetAttribute("Include")).Where(a => !string.IsNullOrEmpty(a)).ToArray();
         }
 
-        public void Init(string protoGenPath)
+        public void Init(string protoBufTaskPath, string protoGenPath)
         {
             var xnm = new XmlNamespaceManager(xd.NameTable);
             xnm.AddNamespace("msbuild", msbuildNS);
 
-            string importProject = @"$(ProtoGenPath)\ProtoBuf.MSBuildTask.targets";
+            string importProject = @"$(ProtoBufTaskPath)ProtoBuf.MSBuildTask.targets";
             var importNode = xd.SelectSingleNode("/msbuild:Project/msbuild:Import[@Project='" + importProject + "']", xnm);
             if (importNode == null)
             {
@@ -50,18 +55,35 @@ namespace ProtoBuf.Project
                 xe.SetAttribute("Project", importProject);
                 importNode = xe;
                 xd.DocumentElement.AppendChild(xe);
-                HasProtoGenImport = true;
+                HasProtoBufTaskImport = true;
+            }
+
+            XmlElement propertyGroupNode;
+            var protoBufTaskPathNode = xd.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup[not(@Condition)]/msbuild:ProtoBufTaskPath", xnm);
+            if (protoBufTaskPathNode == null)
+            {
+                var xe = xd.CreateElement("PropertyGroup", msbuildNS);
+                var xe2 = xd.CreateElement("ProtoBufTaskPath", msbuildNS);
+                xe2.InnerText = protoBufTaskPath;
+                xe.AppendChild(xe2);
+                propertyGroupNode = xe;
+                // ensure properties come before targets
+                xd.DocumentElement.InsertBefore(xe, importNode);
+                ProtoBufTaskPath = protoBufTaskPath;
+            }
+            else
+            {
+                propertyGroupNode = protoBufTaskPathNode.ParentNode as XmlElement;
+                protoBufTaskPathNode.InnerText = protoBufTaskPath;
+                ProtoBufTaskPath = protoBufTaskPath;
             }
 
             var protoGenPathNode = xd.SelectSingleNode("/msbuild:Project/msbuild:PropertyGroup[not(@Condition)]/msbuild:ProtoGenPath", xnm);
             if (protoGenPathNode == null)
             {
-                var xe = xd.CreateElement("PropertyGroup", msbuildNS);
                 var xe2 = xd.CreateElement("ProtoGenPath", msbuildNS);
                 xe2.InnerText = protoGenPath;
-                xe.AppendChild(xe2);
-                // ensure properties come before targets
-                xd.DocumentElement.InsertBefore(xe, importNode);
+                propertyGroupNode.AppendChild(xe2);
                 ProtoGenPath = protoGenPath;
             }
             else

@@ -13,6 +13,7 @@ namespace ProtoBuf.ProjectInserter.WinForms
         public Form1()
         {
             InitializeComponent();
+            lblFileCount.Text = "0";
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -22,21 +23,33 @@ namespace ProtoBuf.ProjectInserter.WinForms
             project.Open(ofd1.FileName);
             projectFile = ofd1.FileName;
             txtProject.Text = projectFile;
+            txtProtoBufTaskPath.Text = project.ProtoBufTaskPath;
             txtProtoGenPath.Text = project.ProtoGenPath;
             btnInit.Enabled = true;
-            btnAddFiles.Enabled = btnSave.Enabled = (project.HasProtoGenImport && !string.IsNullOrEmpty(project.ProtoGenPath));
+            btnAddFiles.Enabled = btnSave.Enabled = (project.HasProtoBufTaskImport && !string.IsNullOrEmpty(project.ProtoBufTaskPath) && !string.IsNullOrEmpty(project.ProtoGenPath));
             lsbFiles.Items.Clear();
             lsbFiles.Items.AddRange(project.LoadItems());
+            lblFileCount.Text = lsbFiles.Items.Count.ToString();
         }
 
         private void btnInit_Click(object sender, EventArgs e)
         {
+            fbd1.Description = "ProtoBufTaskPath";
+            fbd1.SelectedPath = MakeAbsoluteFileName(project.ProtoGenPath ?? "");
+            if (fbd1.ShowDialog() != DialogResult.OK) return;
+            string protobufTaskPath = GetRelativeFileName(fbd1.SelectedPath + Path.DirectorySeparatorChar);
+            protobufTaskPath = protobufTaskPath == "" ? "." : protobufTaskPath;
+            protobufTaskPath += protobufTaskPath.EndsWith(Path.DirectorySeparatorChar.ToString()) ? "" : Path.DirectorySeparatorChar.ToString();
+
+            fbd1.Description = "ProtoGenPath";
             fbd1.SelectedPath = MakeAbsoluteFileName(project.ProtoGenPath ?? "");
             if (fbd1.ShowDialog() != DialogResult.OK) return;
             string protoGenPath = GetRelativeFileName(fbd1.SelectedPath + Path.DirectorySeparatorChar);
             protoGenPath = protoGenPath == "" ? "." : protoGenPath;
             protoGenPath += protoGenPath.EndsWith(Path.DirectorySeparatorChar.ToString()) ? "" : Path.DirectorySeparatorChar.ToString();
-            project.Init(protoGenPath);
+
+            project.Init(protobufTaskPath, protoGenPath);
+            txtProtoBufTaskPath.Text = project.ProtoBufTaskPath;
             txtProtoGenPath.Text = project.ProtoGenPath;
             btnAddFiles.Enabled = btnSave.Enabled = true;
         }
@@ -62,6 +75,7 @@ namespace ProtoBuf.ProjectInserter.WinForms
                 project.AddItem(GetRelativeFileName(file));
             lsbFiles.Items.Clear();
             lsbFiles.Items.AddRange(project.LoadItems());
+            lblFileCount.Text = lsbFiles.Items.Count.ToString();
         }
 
         private void btnSave_Click(object sender, EventArgs e)

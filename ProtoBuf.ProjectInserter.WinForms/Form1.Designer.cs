@@ -39,13 +39,19 @@
             this.fbd1 = new System.Windows.Forms.FolderBrowserDialog();
             this.txtProtoGenPath = new System.Windows.Forms.TextBox();
             this.lsbFiles = new System.Windows.Forms.ListBox();
+            this.txtProtoBufTaskPath = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblFileCount = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnOpen
             // 
-            this.btnOpen.Location = new System.Drawing.Point(12, 33);
+            this.btnOpen.Location = new System.Drawing.Point(12, 10);
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(200, 23);
+            this.btnOpen.Size = new System.Drawing.Size(122, 23);
             this.btnOpen.TabIndex = 0;
             this.btnOpen.Text = "Open Project";
             this.btnOpen.UseVisualStyleBackColor = true;
@@ -54,9 +60,9 @@
             // btnInit
             // 
             this.btnInit.Enabled = false;
-            this.btnInit.Location = new System.Drawing.Point(12, 62);
+            this.btnInit.Location = new System.Drawing.Point(12, 39);
             this.btnInit.Name = "btnInit";
-            this.btnInit.Size = new System.Drawing.Size(200, 23);
+            this.btnInit.Size = new System.Drawing.Size(122, 46);
             this.btnInit.TabIndex = 1;
             this.btnInit.Text = "Initialize ProtoBuf MSBuildTask";
             this.btnInit.UseVisualStyleBackColor = true;
@@ -67,7 +73,7 @@
             this.btnAddFiles.Enabled = false;
             this.btnAddFiles.Location = new System.Drawing.Point(12, 91);
             this.btnAddFiles.Name = "btnAddFiles";
-            this.btnAddFiles.Size = new System.Drawing.Size(200, 23);
+            this.btnAddFiles.Size = new System.Drawing.Size(122, 23);
             this.btnAddFiles.TabIndex = 2;
             this.btnAddFiles.Text = "Add ProtoBuf Files";
             this.btnAddFiles.UseVisualStyleBackColor = true;
@@ -78,7 +84,7 @@
             this.btnSave.Enabled = false;
             this.btnSave.Location = new System.Drawing.Point(12, 120);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(200, 23);
+            this.btnSave.Size = new System.Drawing.Size(122, 23);
             this.btnSave.TabIndex = 3;
             this.btnSave.Text = "Save Project";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -86,10 +92,10 @@
             // 
             // txtProject
             // 
-            this.txtProject.Location = new System.Drawing.Point(218, 36);
+            this.txtProject.Location = new System.Drawing.Point(240, 12);
             this.txtProject.Name = "txtProject";
             this.txtProject.ReadOnly = true;
-            this.txtProject.Size = new System.Drawing.Size(437, 20);
+            this.txtProject.Size = new System.Drawing.Size(415, 20);
             this.txtProject.TabIndex = 4;
             // 
             // ofd1
@@ -105,25 +111,84 @@
             // 
             // txtProtoGenPath
             // 
-            this.txtProtoGenPath.Location = new System.Drawing.Point(218, 65);
+            this.txtProtoGenPath.Location = new System.Drawing.Point(240, 65);
             this.txtProtoGenPath.Name = "txtProtoGenPath";
             this.txtProtoGenPath.ReadOnly = true;
-            this.txtProtoGenPath.Size = new System.Drawing.Size(437, 20);
+            this.txtProtoGenPath.Size = new System.Drawing.Size(415, 20);
             this.txtProtoGenPath.TabIndex = 5;
             // 
             // lsbFiles
             // 
             this.lsbFiles.FormattingEnabled = true;
-            this.lsbFiles.Location = new System.Drawing.Point(219, 91);
+            this.lsbFiles.Location = new System.Drawing.Point(240, 91);
             this.lsbFiles.Name = "lsbFiles";
             this.lsbFiles.Size = new System.Drawing.Size(227, 238);
             this.lsbFiles.TabIndex = 6;
+            // 
+            // txtProtoBufTaskPath
+            // 
+            this.txtProtoBufTaskPath.Location = new System.Drawing.Point(240, 39);
+            this.txtProtoBufTaskPath.Name = "txtProtoBufTaskPath";
+            this.txtProtoBufTaskPath.ReadOnly = true;
+            this.txtProtoBufTaskPath.Size = new System.Drawing.Size(416, 20);
+            this.txtProtoBufTaskPath.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(194, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Project";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(140, 42);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(94, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "ProtoBufTaskPath";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(160, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(74, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "ProtoGenPath";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(165, 91);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(69, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "ProtoBuf files";
+            // 
+            // lblFileCount
+            // 
+            this.lblFileCount.AutoSize = true;
+            this.lblFileCount.Location = new System.Drawing.Point(165, 116);
+            this.lblFileCount.Name = "lblFileCount";
+            this.lblFileCount.Size = new System.Drawing.Size(40, 13);
+            this.lblFileCount.TabIndex = 12;
+            this.lblFileCount.Text = "(count)";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(656, 340);
+            this.Controls.Add(this.lblFileCount);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtProtoBufTaskPath);
             this.Controls.Add(this.lsbFiles);
             this.Controls.Add(this.txtProtoGenPath);
             this.Controls.Add(this.txtProject);
@@ -153,6 +218,12 @@
         private System.Windows.Forms.FolderBrowserDialog fbd1;
         private System.Windows.Forms.TextBox txtProtoGenPath;
         private System.Windows.Forms.ListBox lsbFiles;
+        private System.Windows.Forms.TextBox txtProtoBufTaskPath;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblFileCount;
     }
 }
 
