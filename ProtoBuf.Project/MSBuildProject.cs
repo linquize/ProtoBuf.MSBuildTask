@@ -28,7 +28,7 @@ namespace ProtoBuf.Project
             if (protoGenPathNode != null)
                 ProtoGenPath = protoGenPathNode.InnerText;
 
-            string importProject = @"$(ProtoBufTaskPath)\ProtoBuf.MSBuildTask.targets";
+            string importProject = @"$(ProtoBufTaskPath)ProtoBuf.MSBuildTask.targets";
             var importNode = xd.SelectSingleNode("/msbuild:Project/msbuild:Import[@Project='" + importProject + "']", xnm);
             HasProtoBufTaskImport = importNode != null;
         }
